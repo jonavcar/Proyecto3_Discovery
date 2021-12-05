@@ -7,6 +7,7 @@ on:
     branches: [ main ]
 env:
   DOCKER_IMAGE_NAME: 'discovery'
+  AZURE_REGISTRE_USERNAME: 'jonavcarp3discovery'
 
 jobs:
 
@@ -27,13 +28,16 @@ jobs:
         mvn -B package --file pom.xml
         mkdir staging && cp target/*.jar staging
 
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag ${{env.DOCKER_IMAGE_NAME}}:latest
-
-    - name: Docker Login
-      run: docker login --username '${{secrets.DOCKER_LOGIN}}' --password '${{secrets.DOCKER_PASSWORD}}'
-
     - name: 'Login via Azure CLI'
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - uses: azure/docker-login@v1
+      with:
+        login-server: ${{env.AZURE_REGISTRE_USERNAME}}.azurecr.io
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+    - run: |
+        docker build . --file Dockerfile -t ${{env.AZURE_REGISTRE_USERNAME}}.azurecr.io/${{env.DOCKER_IMAGE_NAME}}:latest
+        docker push ${{env.AZURE_REGISTRE_USERNAME}}.azurecr.io/${{env.DOCKER_IMAGE_NAME}}:latest
