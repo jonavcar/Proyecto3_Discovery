@@ -8,6 +8,7 @@ on:
 env:
   DOCKER_IMAGE_NAME: 'discovery'
   AZURE_REGISTRE_USERNAME: 'jonavcarp3discovery'
+  AZURE_LOGIN_SERVER: ${{env.AZURE_REGISTRE_USERNAME}}.azurecr.io
 
 jobs:
 
@@ -35,9 +36,9 @@ jobs:
 
     - uses: azure/docker-login@v1
       with:
-        login-server: ${{env.AZURE_REGISTRE_USERNAME}}.azurecr.io
+        login-server: ${{env.AZURE_LOGIN_SERVER}}
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
     - run: |
-        docker build . --file Dockerfile -t ${{env.AZURE_REGISTRE_USERNAME}}.azurecr.io/${{env.DOCKER_IMAGE_NAME}}:latest
-        docker push ${{env.AZURE_REGISTRE_USERNAME}}.azurecr.io/${{env.DOCKER_IMAGE_NAME}}:latest
+        docker build . --file Dockerfile -t ${{env.AZURE_LOGIN_SERVER}}/${{env.DOCKER_IMAGE_NAME}}:latest
+        docker push ${{env.AZURE_LOGIN_SERVER}}/${{env.DOCKER_IMAGE_NAME}}:latest
