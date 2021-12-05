@@ -33,7 +33,8 @@ jobs:
     - name: Docker Login
       run: docker login --username '${{secrets.DOCKER_LOGIN}}' --password '${{secrets.DOCKER_PASSWORD}}'
 
-    - name: 'Login via Azure CLI'
-      uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    - name: Tag Docker Image
+      run: docker tag ${{secrets.DOCKER_IMAGE_NAME}}:latest  ${{secrets.DOCKER_LOGIN}}/${{secrets.DOCKER_IMAGE_NAME}}:latest
+
+    - name: Push Docker Image
+      run: docker push ${{secrets.DOCKER_LOGIN}}/${{secrets.DOCKER_IMAGE_NAME}}:latest
