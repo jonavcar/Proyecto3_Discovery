@@ -33,9 +33,8 @@ jobs:
     - name: Docker Login
       run: docker login --username '${{secrets.DOCKER_LOGIN}}' --password '${{secrets.DOCKER_PASSWORD}}'
 
-    - name: Build and push
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          push: true
-          tags: '${{secrets.DOCKER_LOGIN}}'/'${{secrets.DOCKER_IMAGE_NAME}}':latest
+    - name: Tag Docker Image
+      run: docker tag ${{secrets.DOCKER_IMAGE_NAME}}:latest  ${{secrets.DOCKER_LOGIN}}/${{secrets.DOCKER_IMAGE_NAME}}:latest
+
+    - name: Push Docker Image
+      run: docker push ${{secrets.DOCKER_LOGIN}}/${{secrets.DOCKER_IMAGE_NAME}}:latest
