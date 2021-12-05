@@ -8,7 +8,7 @@ on:
 env:
   DOCKER_IMAGE_NAME: 'discovery'
   AZURE_REGISTRE_USERNAME: 'jonavcarp3discovery'
-  AZURE_LOGIN_SERVER: ${{AZURE_REGISTRE_USERNAME}}.azurecr.io
+  AZURE_LOGIN_SERVER: 'jonavcarp3discovery.azurecr.io'
 
 jobs:
 
